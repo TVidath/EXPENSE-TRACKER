@@ -1,0 +1,163 @@
+import 'package:flutter/material.dart';
+import 'package:expense_tracker/models/income.dart';
+import 'package:intl/intl.dart';
+
+class AddIncome extends StatefulWidget {
+  const AddIncome({super.key, required this.onAddIncome});
+
+  final void Function(Income income) onAddIncome;
+
+  @override
+  State<AddIncome> createState() => _AddIncomeState();
+}
+
+class _AddIncomeState extends State<AddIncome> {
+  final _titleController = TextEditingController();
+  final _amountController = TextEditingController();
+  DateTime? _selectedDate;
+  IncomeSource _selectedSource = IncomeSource.salary;
+
+  void _presentDatePicker() async {
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year - 1, now.month, now.day);
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: now,
+      firstDate: firstDate,
+      lastDate: now,
+    );
+    setState(() {
+      _selectedDate = pickedDate;
+    });
+  }
+
+  void _submitIncomeData() {
+    final enteredAmount = double.tryParse(_amountController.text);
+    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        _selectedDate == null) {
+      showDialog(
+        context: context,
+        builder:
+            (ctx) => AlertDialog(
+              title: const Text('Invalid input'),
+              content: const Text(
+                'Please make sure a valid title, amount, and date was entered.',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                  },
+                  child: const Text('Okay'),
+                ),
+              ],
+            ),
+      );
+      return;
+    }
+
+    widget.onAddIncome(
+      Income(
+        title: _titleController.text,
+        amount: enteredAmount,
+        date: _selectedDate!,
+        source: _selectedSource,
+      ),
+    );
+    Navigator.pop(context);
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _amountController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          TextField(
+            controller: _titleController,
+            maxLength: 50,
+            decoration: const InputDecoration(label: Text('Title')),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _amountController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    prefixText: '\$ ',
+                    label: Text('Amount'),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      _selectedDate == null
+                          ? 'No date selected'
+                          : DateFormat.yMd().format(_selectedDate!),
+                    ),
+                    IconButton(
+                      onPressed: _presentDatePicker,
+                      icon: const Icon(Icons.calendar_month),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          DropdownButton<IncomeSource>(
+            value: _selectedSource,
+            items:
+                IncomeSource.values
+                    .map(
+                      (source) => DropdownMenuItem(
+                        value: source,
+                        child: Text(source.name.toUpperCase()),
+                      ),
+                    )
+                    .toList(),
+            onChanged: (value) {
+              if (value == null) {
+                return;
+              }
+              setState(() {
+                _selectedSource = value;
+              });
+            },
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              const Spacer(),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: _submitIncomeData,
+                child: const Text('Save Income'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
