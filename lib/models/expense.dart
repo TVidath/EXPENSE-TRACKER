@@ -21,15 +21,48 @@ class Expense {
     required this.amount,
     required this.date,
     required this.category,
-  }) : id = id ?? uuid.v4();
+    String? originalCurrency,
+    double? originalAmount,
+  })  : id = id ?? uuid.v4(),
+        originalCurrency = originalCurrency,
+        originalAmount = originalAmount;
 
   final String id;
   final String title;
-  final double amount;
+  final double amount; // Amount in default currency
   final DateTime date;
   final Category category;
+  final String?
+      originalCurrency; // Original currency code if different from default
+  final double? originalAmount; // Original amount before conversion
 
   String get formattedDate {
     return formatter.format(date);
+  }
+
+  // Checks if this expense was created in a currency other than the default
+  bool get wasConverted {
+    return originalCurrency != null && originalAmount != null;
+  }
+
+  // Factory to create a copy with updated values
+  Expense copyWith({
+    String? id,
+    String? title,
+    double? amount,
+    DateTime? date,
+    Category? category,
+    String? originalCurrency,
+    double? originalAmount,
+  }) {
+    return Expense(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      amount: amount ?? this.amount,
+      date: date ?? this.date,
+      category: category ?? this.category,
+      originalCurrency: originalCurrency ?? this.originalCurrency,
+      originalAmount: originalAmount ?? this.originalAmount,
+    );
   }
 }

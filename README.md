@@ -1,16 +1,64 @@
-# expense_tracker
+# Expense Tracker
 
-A new Flutter project.
+A comprehensive expense and income tracking application built with Flutter. Track your expenses, income, set budgets, and view reports.
+
+## Features
+
+### Core Functionality
+- Track expenses and income with categories
+- Set and manage budgets
+- View reports and analytics
+- Multi-currency support
+- Dark and light theme support
+
+### Authentication
+- User login and registration
+- Profile management
+- Secure data storage
+- Demo account for easy testing
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Prerequisites
+- Flutter SDK installed
+- An IDE (VS Code, Android Studio, etc.)
 
-A few resources to get you started if this is your first Flutter project:
+### Installation
+1. Clone the repository
+   ```
+   git clone https://github.com/yourusername/expense_tracker.git
+   ```
+2. Install dependencies
+   ```
+   flutter pub get
+   ```
+3. Run the app
+   ```
+   flutter run
+   ```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Authentication
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The app includes a simple authentication system:
+- New users can register by entering a valid email and password (minimum 6 characters)
+- Existing users can log in with their credentials
+- You can use the demo account for testing:
+  - Email: demo@example.com
+  - Password: password
+
+## Data Storage
+
+All data is stored locally on the device using SharedPreferences:
+- Expenses and incomes
+- User budgets
+- User settings
+- User profile
+
+## Future Enhancements
+- Cloud synchronization
+- More detailed reports
+- Export data to CSV/PDF
+- Advanced budget rules
+
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.

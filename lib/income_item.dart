@@ -1,32 +1,72 @@
 import 'package:flutter/material.dart';
 import 'package:expense_tracker/models/income.dart';
+import 'package:expense_tracker/services/settings_service.dart';
 import 'package:intl/intl.dart';
 
 class IncomeItem extends StatelessWidget {
-  const IncomeItem(this.income, {super.key, required this.onRemoveIncome});
+  const IncomeItem(
+    this.income, {
+    super.key,
+    required this.onRemoveIncome,
+  });
 
   final Income income;
   final void Function(Income income) onRemoveIncome;
+
+  IconData _getIconForSource(IncomeSource source) {
+    switch (source) {
+      case IncomeSource.salary:
+        return Icons.work;
+      case IncomeSource.business:
+        return Icons.business;
+      case IncomeSource.investment:
+        return Icons.trending_up;
+      case IncomeSource.other:
+        return Icons.more_horiz;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 16,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(income.title, style: Theme.of(context).textTheme.titleLarge),
+            Text(
+              income.title,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 4),
             Row(
               children: [
                 Text(
-                  '\$${income.amount.toStringAsFixed(2)}',
+                  SettingsService.formatCurrency(income.amount),
                   style: const TextStyle(
                     color: Colors.green,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                if (income.wasConverted)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4.0),
+                    child: Tooltip(
+                      message:
+                          'Originally ${SettingsService.formatCurrencyWithCode(income.originalAmount!, income.originalCurrency!)}',
+                      child: const Icon(
+                        Icons.currency_exchange,
+                        size: 14,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
                 const Spacer(),
                 Row(
                   children: [
@@ -55,18 +95,5 @@ class IncomeItem extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  IconData _getIconForSource(IncomeSource source) {
-    switch (source) {
-      case IncomeSource.salary:
-        return Icons.work;
-      case IncomeSource.business:
-        return Icons.business;
-      case IncomeSource.investment:
-        return Icons.trending_up;
-      case IncomeSource.other:
-        return Icons.more_horiz;
-    }
   }
 }
