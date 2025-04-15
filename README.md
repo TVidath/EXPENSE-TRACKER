@@ -2,7 +2,7 @@
 
 A comprehensive expense and income tracking application built with Flutter. This app helps users manage their personal finances by tracking expenses, income, setting budgets, and providing insightful reports.
 
-![Expense Tracker App](screenshots/dashboard.png)
+![Expense Tracker App]
 
 ## Features
 
@@ -28,7 +28,7 @@ A comprehensive expense and income tracking application built with Flutter. This
 
 | Dashboard | Reports | Budgets | Settings |
 |-----------|---------|---------|----------|
-| ![Dashboard](screenshots/dashboard.png) | ![Reports](screenshots/reports.png) | ![Budgets](screenshots/budgets.png) | ![Settings](screenshots/settings.png) |
+| ![Dashboard](screenshots/Screenshot_dashboard.png) | ![Reports](screenshots/Screenshot_reports.png) | ![Budgets](screenshots/Screenshot_budget.png) | ![Settings](screenshots/Screenshot_settings.png) |
 
 ## Getting Started
 
